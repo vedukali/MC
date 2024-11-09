@@ -1,0 +1,68 @@
+#include<p18f4550.h>
+#define LCD_EN PORTAbits.RA1
+#define LCD_RS PORTAbits. RAO
+#define LCDPORT PORTB
+void lcd_delay (unsigned int time)
+{
+unsigned int i, j;
+for (i=0;i<time; i++)
+{
+for (j=0;j<100;j++);
+}}
+void sendinstruction (unsigned char
+command)
+{
+LCD_RS=0;
+LCDPORT=command;
+LCD_EN=1;
+lcd_delay (10) ;
+LCD_EN=0;
+lcd_delay (10) ;
+}
+void sendData (unsigned char lcddata)
+{
+LCD_RS=1;
+LCDPORT= 1cddata;
+LCD_EN=1;
+lcd_delay (10) ;
+LCD_EN=0;
+lcd_delay (10) ;
+}
+void InitLCD (void)
+{
+ADCON1=0xOF;
+TRISB=0x00;
+TRISAbits.RA0=0;
+TRISAbits.RA1=0;
+sendinstruction (0x38) ;
+sendinstruction (0x06) ;
+sendinstruction (0x0C) ;
+sendinstruction (0x01) ;
+sendinstruction (0x80) ;
+}
+unsigned char *Stringl = "ved";
+unsigned char *String2 = "kulkarni";
+void main (void)
+{
+ADCON1=0xOF;
+TRISB=0x00;
+TRISAbits.RAO=0;
+TRISAbits.RAl=0;
+sendinstruction (0x38) ;
+sendinstruction (0x06) ;
+sendinstruction (0x0C) ;
+sendinstruction (0x01) ;
+sendinstruction (0x80) ;
+while(*String1)
+{
+sendData (*String1) ;
+String1++;
+}
+sendinstruction (0xC0) ;
+while(*String2)
+{
+sendData(*String2) ;
+String2++;
+}
+while (1);
+}
